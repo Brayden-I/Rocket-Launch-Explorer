@@ -1,0 +1,176 @@
+/* ---------- Color palette (change these to re-theme the whole page) ---------- */
+:root {
+    --sky-deep: #070b1a;
+    --sky-glow: #1b1f4a;
+    --sky-violet: #2a1450;
+    --panel: rgba(18, 24, 58, 0.78);
+    --line: rgba(140, 160, 255, 0.28);
+    --text-main: #e8ecff;
+    --text-muted: #9aa3cf;
+    --accent: #ff7a3d;
+    --accent-soft: #ffb184;
+    --error: #ff6b81;
+    --loading: #ffd166;
+}
+
+/* ---------- Page ---------- */
+body {
+    min-height: 100vh;
+    padding: 1.5rem 0.75rem 3rem;
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.6;
+    color: var(--text-main);
+    background:
+            radial-gradient(circle at 15% 10%, var(--sky-glow) 0%, transparent 45%),
+            radial-gradient(circle at 85% 85%, var(--sky-violet) 0%, transparent 40%),
+            var(--sky-deep);
+    background-attachment: fixed;
+}
+
+/* The centered panel that holds everything */
+main.container {
+    max-width: 780px;
+    padding: 2rem 1.5rem 2.5rem;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5);
+}
+
+h1 {
+    font-family: "Orbitron", "Trebuchet MS", sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.4rem, 5vw, 2.2rem);
+    letter-spacing: 0.05em;
+}
+
+/* ---------- Carousel ---------- */
+#launchCarousel {
+    --bs-carousel-indicator-bg: var(--accent); /* dot color */
+}
+
+/* Launch name above each rocket image */
+#launchCarousel .carousel-item h3 {
+    font-family: "Orbitron", "Trebuchet MS", sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.03em;
+    color: var(--accent-soft);
+}
+
+/* Rocket images and the "no image" placeholder */
+#launchCarousel .carousel-item img,
+#launchCarousel .carousel-item .bg-secondary {
+    border: 1px solid var(--line);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+}
+
+#launchCarousel .carousel-item .bg-secondary {
+    background: linear-gradient(135deg, #1b2150, #2a1450) !important;
+    color: var(--text-muted) !important;
+    font-style: italic;
+}
+
+/* Previous / next buttons */
+#launchCarousel .btn-icon {
+    color: var(--text-main);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--line);
+    transition: background 0.2s, border-color 0.2s;
+}
+
+#launchCarousel .btn-icon:hover {
+    background: rgba(255, 122, 61, 0.25);
+    border-color: var(--accent);
+}
+
+/* ---------- Day selector ---------- */
+label[for="daySelector"] {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+}
+
+#daySelector {
+    color-scheme: dark; /* dark calendar popup and icon */
+    color: var(--text-main);
+    background-color: #0e1432;
+    border-color: var(--line);
+}
+
+#daySelector:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 0.2rem rgba(255, 122, 61, 0.25);
+}
+
+#clearDay {
+    color: var(--accent-soft);
+    border-color: var(--line);
+}
+
+#clearDay:hover {
+    color: #fff;
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+#dayMessage {
+    min-height: 1.5em;
+    margin-top: 0.4rem;
+    color: var(--text-muted);
+}
+
+/* ---------- Loading and error messages (Part 2) ---------- */
+#status {
+    font-weight: 600;
+}
+
+#status:empty {
+    display: none; /* no blank gap when there is no message */
+}
+
+#status.loading {
+    color: var(--loading);
+}
+
+#status.error {
+    padding: 0.7rem 0.9rem;
+    color: var(--error);
+    background: rgba(255, 107, 129, 0.1);
+    border-left: 4px solid var(--error);
+    border-radius: 6px;
+}
+
+/* ---------- Mission details ---------- */
+#missionDetails {
+    margin-top: 1rem;
+    padding: 1.1rem 1.25rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--accent);
+    border-radius: 12px;
+}
+
+#missionDetails:empty {
+    display: none; /* no empty box while loading or after an error */
+}
+
+#missionDetails h2 {
+    margin-bottom: 0.25rem;
+    font-family: "Orbitron", "Trebuchet MS", sans-serif;
+    font-weight: 600;
+    color: var(--accent);
+}
+
+#missionDetails p:last-child {
+    margin-bottom: 0;
+}
+
+/* ---------- Small screens ---------- */
+@media (max-width: 480px) {
+    main.container {
+        padding: 1.25rem 1rem 1.75rem;
+    }
+}
