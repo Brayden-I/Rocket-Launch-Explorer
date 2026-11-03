@@ -19,41 +19,54 @@ let shownLaunches = []; // Launches that are directly in the carousel
 let latestDetailsRequest = 0;
 
 // REQUESTS
-function getUpcomingLaunches(callback) {
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", BASE_URL + "/launches/upcoming/");
+function getUpcomingLaunches() {
+    showLoading();
 
-    // This function runs every time the request changes state.
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {          // 4 = the request is finished
-            if (xhr.status === 200) {          // 200 = success
-                const data = JSON.parse(xhr.responseText);
-                callback(data.results);          // hand the array to whoever called us
-            } else {
-                console.error("Could not load upcoming launches. Status: " + xhr.status);
-            }
-        }
-    };
+    axios.get(BASE_URL + "/launches/upcoming/")
+        .then(function (response) {
+            clearStatus();
+            handleLaunchList(response.data.results);
+        })
+        .catch(function (error) {
+            console.error(error);
+            showError("Sorry, the upcoming launches could not be loaded. Please try again later.");
+        });
+}
 
-    xhr.send();
+const statusMessage = document.getElementById("status");
+
+function showLoading() {
+    statusMessage.textContent = "Loading...";
+    statusMessage.className = "loading text-center";
+}
+
+function showError(message) {
+    statusMessage.textContent = message;
+    statusMessage.className = "error text-center";
+}
+
+function clearStatus() {
+    statusMessage.textContent = "";
+    statusMessage.className = "text-center";
 }
 
 // Request the upcoming launches
-function getLaunchDetails(launchId, callback) {
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", BASE_URL + "/launches/" + launchId + "/");
-
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                callback(JSON.parse(xhr.responseText));
-            } else {
-                console.error("Could not load launch details. Status: " + xhr.status);
-            }
-        }
-    };
-
-    xhr.send();
+function getLaunchDetails() {
+    const requestNumber = ++latestDetailsRequest;
+    showLoading();
+    
+    axios.get(BASE_URL + "/launches/" + launchId)
+    .then(function (response) {
+        if (requestNumber !== latestDetailsRequest) return;
+        clearStatus();
+        displayLaunchInfo(response.data);
+    })
+    .catch(function (error) {
+        if (requestNumber !== latestDetailsRequest) return;
+        console.error(error);
+        missionDetails.textContent = "";
+        showError("Sorry, the details could not be loaded. Please try again later.");
+    })
 }
 
 function getImageUrl(launch) {
@@ -159,16 +172,7 @@ function displayLaunchInfo(launch) {
 function loadLaunchAt(index) {
     const launch = shownLaunches[index];
     if (!launch) return;
-
-    // If the visitor moves quickly, an older response could arrive after a newer
-    // one. Each request gets a number, and a response is shown only if it is
-    // still the newest request when it arrives.
-    const requestNumber = ++latestDetailsRequest;
-    getLaunchDetails(launch.id, function (details) {
-        if (requestNumber === latestDetailsRequest) {
-            displayLaunchInfo(details);
-        }
-    });
+    getLaunchDetails(launch.id)
 }
 
 carouselElement.addEventListener("slid.bs.carousel", function (event) {
