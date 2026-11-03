@@ -51,11 +51,11 @@ function clearStatus() {
 }
 
 // Request the upcoming launches
-function getLaunchDetails() {
+function getLaunchDetails(launchId) {
     const requestNumber = ++latestDetailsRequest;
     showLoading();
     
-    axios.get(BASE_URL + "/launches/" + launchId)
+    axios.get(BASE_URL + "/launches/" + launchId + "/")
     .then(function (response) {
         if (requestNumber !== latestDetailsRequest) return;
         clearStatus();
